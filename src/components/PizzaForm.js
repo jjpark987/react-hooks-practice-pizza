@@ -1,8 +1,16 @@
 import React from "react";
 
-function PizzaForm() {
+function PizzaForm({ form, onSetForm, onHandleSubmit }) {
+  function handleInputChange(e) {
+    onSetForm({ ...form, [e.target.name] : e.target.value })
+  }
+
+  function handleRadioChange(e) {
+    e.target.value === "Vegetarian" ? onSetForm({ ...form, vegetarian: true }) : onSetForm({ ...form, vegetarian: false })
+  }
+
   return (
-    <form onSubmit={null /*handle that submit*/}>
+    <form onSubmit={onHandleSubmit}>
       <div className="form-row">
         <div className="col-5">
           <input
@@ -10,10 +18,17 @@ function PizzaForm() {
             type="text"
             name="topping"
             placeholder="Pizza Topping"
+            value={form.topping}
+            onChange={handleInputChange}
           />
         </div>
         <div className="col">
-          <select className="form-control" name="size">
+          <select 
+            className="form-control" 
+            name="size" 
+            value={form.size}
+            onChange={handleInputChange}
+          >
             <option value="Small">Small</option>
             <option value="Medium">Medium</option>
             <option value="Large">Large</option>
@@ -26,6 +41,8 @@ function PizzaForm() {
               type="radio"
               name="vegetarian"
               value="Vegetarian"
+              checked={form.vegetarian}
+              onChange={handleRadioChange}
             />
             <label className="form-check-label">Vegetarian</label>
           </div>
@@ -35,6 +52,8 @@ function PizzaForm() {
               type="radio"
               name="vegetarian"
               value="Not Vegetarian"
+              checked={!form.vegetarian}
+              onChange={handleRadioChange}
             />
             <label className="form-check-label">Not Vegetarian</label>
           </div>
